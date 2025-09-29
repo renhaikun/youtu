@@ -282,8 +282,8 @@ def main() -> None:
         "generated/mysql_bi_clean.yaml",
     )
     webui = WebUIAgents(default_config=default_config)
-    # Use defaults: 127.0.0.1:8848
-    webui.launch()
+    # Bind to all interfaces so remote clients can access
+    webui.launch(ip="0.0.0.0", port=8848)
 
 
 if __name__ == "__main__":

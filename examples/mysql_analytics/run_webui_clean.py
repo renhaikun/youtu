@@ -190,7 +190,8 @@ def main() -> None:
 
     default_config = os.environ.get("UTU_DEFAULT_CONFIG", "generated/mysql_bi_clean.yaml")
     webui = WebUIAgents(default_config=default_config)
-    webui.launch()
+    # Bind to all interfaces so remote clients can access
+    webui.launch(ip="0.0.0.0", port=8848)
 
 
 if __name__ == "__main__":
