@@ -1,0 +1,31 @@
+[
+  {
+    "question": "我们有一个 MySQL 数据库（电商示例），请先连接并梳理各表关系，生成 ER 图并与我确认；随后按最近 90 天构建 GMV、订单数、客单价与新老客占比的周趋势看板，并输出初步业务洞察与改进建议。",
+    "available_agents": "DBSchemaAgent, PyDAgent, InsightAgent",
+    "analysis": "先由 DBSchemaAgent 通过 INFORMATION_SCHEMA 获取库/表/列/约束信息，推断 PK/FK 与隐含关联（如订单与用户、订单与明细、明细与商品），草拟 Mermaid ER 图并在本轮结束前输出（以 ```mermaid 代码块形式）。重要：在得到用户明确确认（例如“确认ER”）之前，不得继续后续分析。确认后由 PyDAgent 直接从数据库读取并计算所需指标；若本地缺少所需 Python 依赖，将先征求用户同意再通过 uv pip 安装并做最小 import 校验。InsightAgent 汇总指标与图表，给出业务建议。",
+    "plan": [
+      {"agent_name": "DBSchemaAgent", "task": "使用只读账号连接 MySQL，扫描 INFORMATION_SCHEMA 并草拟 ER 图；调用 ask_user 征求用户确认（确认前不得继续）", "completed": false},
+      {"agent_name": "PyDAgent", "task": "直接从数据库读取最近 90 天订单及相关维度（用户/商品），计算 GMV、订单数、AOV、新老客占比并生成周趋势图（保存文件路径）", "completed": false},
+      {"agent_name": "InsightAgent", "task": "整合趋势图与关键指标，输出初步洞察与改进建议（投放/转化/复购）", "completed": false}
+    ]
+  },
+  {
+    "question": "请基于 MySQL 营销/交易数据完成留存与回访分析：定义首次购买 Cohort，输出 1/4/12 周回访曲线并解读人群差异。",
+    "available_agents": "DBSchemaAgent, PyDAgent, InsightAgent",
+    "analysis": "确认交易与用户表结构后，由 PyDAgent 直接从数据库生成 cohort 级数据（首购周 + 后续是否复购），绘制回访曲线；InsightAgent 分析差异并提出运营建议。",
+    "plan": [
+      {"agent_name": "DBSchemaAgent", "task": "确认用户与订单表关系与关键口径（首购定义/时间窗/去重规则）；必要时调用 ask_user 征求确认（确认前不得继续）", "completed": false},
+      {"agent_name": "PyDAgent", "task": "直接从数据库计算 cohort 回访数据并生成 1/4/12 周回访曲线（图表文件路径）", "completed": false},
+      {"agent_name": "InsightAgent", "task": "分析人群/渠道/类目差异与影响因素，提出建议", "completed": false}
+    ]
+  },
+  {
+    "question": "为近 6 个月用户分群与 LTV 初评估提供支持：构建 RFM 指标（按最近一次下单时间分箱），输出分群分布与高价值人群特征建议。",
+    "available_agents": "DBSchemaAgent, PyDAgent, InsightAgent",
+    "analysis": "由 PyDAgent 直接从数据库计算近 6 个月用户级 RFM；InsightAgent 输出分布图与特征洞察，并提出拉新/促活/留存策略。",
+    "plan": [
+      {"agent_name": "PyDAgent", "task": "直接从数据库生成用户级 RFM 指标（R/F/M），并生成 RFM 分布图与关键分位点表（保存文件路径）", "completed": false},
+      {"agent_name": "InsightAgent", "task": "识别高价值人群与流失风险人群特征，提出业务建议", "completed": false}
+    ]
+  }
+]

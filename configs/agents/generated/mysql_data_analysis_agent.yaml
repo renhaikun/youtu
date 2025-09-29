@@ -1,0 +1,34 @@
+# @package _global_
+defaults:
+  - /model/base@planner_model
+  - /model/base@reporter_model
+  - /agents/simple/mysql_db_worker@workers.DBSchemaAgent
+  - /agents/simple/data_analysis_agent@workers.PyDAgent
+  - /agents/simple/analysis_agent@workers.InsightAgent
+  - _self_
+
+type: orchestra
+
+planner_config:
+  # Examples targeted for MySQL analytics flows
+  examples_path: examples/mysql_analytics/planner_examples_data.json
+
+reporter_config:
+  # Use a rich HTML reporter; the WebUI renders this nicely
+  template_path: ${oc.env:UTU_REPORT_TEMPLATE,examples/data_analysis/web_reporter_sp.j2}
+
+workers_info:
+  - name: DBSchemaAgent
+    desc: Connects to MySQL, inspects INFORMATION_SCHEMA, infers PK/FK/implicit relations, and drafts an ER diagram for user confirmation.
+    strengths: Schema discovery, relation inference, SQL sampling, CSV exports via mysql CLI, graph generation
+    weaknesses: Requires local mysql client or read-only creds; heavy queries need confirmation
+  - name: PyDAgent
+    desc: Python data analysis worker for EDA, KPIs, sampling, feature engineering and charting.
+    strengths: pandas/numpy/matplotlib available via `execute_python_code`; can compute KPIs and generate charts saved locally
+    weaknesses: Avoids heavy packages; no internet installation; rely on local CSVs exported by DBSchemaAgent
+  - name: InsightAgent
+    desc: Synthesizes findings and business recommendations into a structured report.
+    strengths: Report structuring, executive summaries, commercial insights
+    weaknesses: Text-only; relies on artifacts produced by other workers
+
+  

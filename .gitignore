@@ -1,0 +1,61 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# File types to ignore
+*.log
+*.db
+*.jsonl
+*.csv
+*.xlsx
+*.xls
+*.pdf
+*.mp3
+*.mp4
+*.wav
+*.MOV
+*.xml
+# *.png
+*.jpg
+*.zip
+*.docx
+*.pptx
+*.m4a
+*.pdb
+*.bak
+*.publish
+*.html
+*.pkl
+*.whl
+
+# Python related
+.pytest_cache/
+.mypy_cache/
+
+
+# Data directories
+/.cache/
+/data/
+/site/
+/logs/
+
+
+
+# IDEs and editors
+.idea/
+.vscode/
+.gemini/
+.claude/
+.codex/
+
+# OS files
+.DS_Store
+
+
